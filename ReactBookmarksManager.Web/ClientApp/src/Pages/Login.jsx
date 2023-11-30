@@ -12,6 +12,7 @@ const Login = () => {
         email: '',
         password:''
     });
+    const [isValidLogin, setIsValidLogin] = useState(true);
 
     const onTextChange = e => {
         const copy = { ...formData };
@@ -22,8 +23,12 @@ const Login = () => {
     const onFormSubmit = async e => {
         e.preventDefault();
         const { data } = await axios.post('/api/account/login', formData);
-        setUser(data);
-        navigate('/mybookmarks');
+        const isValid = !!data;
+        setIsValidLogin(isValid);
+        if (isValid) {
+            setUser(data);
+            navigate('/mybookmarks');
+        }
     }
 
     return (
@@ -31,6 +36,7 @@ const Login = () => {
             <div className="row" style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="col-md-6 offset-md-3 bg-light p-4 rounded shadow">
                     <h3>Log in to your account</h3>
+                    {!isValidLogin && <span className='text-danger'>Invalid username/password. Please try again.</span>}
                     <form onSubmit={onFormSubmit }>
                         <input type="text" name="email" placeholder="Email" className="form-control" value={formData.email} onChange={onTextChange } />
                         <input type="password" name="password" placeholder="Password" className="form-control mt-3" value={formData.password} onChange={onTextChange} />
