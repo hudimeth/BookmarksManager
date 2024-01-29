@@ -30,7 +30,6 @@ const AuthContextComponent = ({ children }) => {
         )
     }
 
-
     return (
         <AuthContext.Provider value={{ user, setUser }}>
             {children}
